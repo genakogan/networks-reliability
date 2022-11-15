@@ -256,7 +256,7 @@ class part1():
         self.printTable()
        
 if __name__ == "__main__":
-    p=part1(0,0,0)
+    p=part1(2,5,19)
     p.graphShow() 
     p.assessNetworkReliability()
     
