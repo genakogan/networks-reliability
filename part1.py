@@ -243,9 +243,9 @@ class part1():
 
                 # Step 4
                 if True == self.calculateDSS(): self.r+=1
-            self.table[p][1] = self.calculateReliabilityNetworkM1()
+            self.table[p][1], self.r = self.calculateReliabilityNetworkM1(),0
             
-            for _ in range(self.M1,self.M2):
+            for _ in range(self.M2):
                 
                 # Function from according to A
                 self.makeGraph(p)
