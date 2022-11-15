@@ -17,7 +17,6 @@ import matplotlib.pyplot as plt
 
 
 class part1():
-    r=0
     def __init__(self,T1=None,T2=None,T3=None):
         self.r=0
 
@@ -35,15 +34,14 @@ class part1():
         # p values from accordng C
         self.pValues = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,0.95,0.99]
         self.table = {}
+
+        self.stateVector=[]
+
         # get from teacher 
         self.T1=T1
         self.T2=T2
         self.T3=T3
-
-    
-            
-            
-    
+   
     # Help function for edge settings. accorsing to step 3
     def booleanValue(self,p,nodeU, nodeV):
 
@@ -69,6 +67,7 @@ class part1():
     def makeGraph(self,p):
 
         # Disjoint Set Structures
+        # Using DSS allow us define if edge in UP or in DOWN
         self.ds=DisjointSet()
         for i in range(1, 21):
 
@@ -81,7 +80,6 @@ class part1():
         # Add a single node `node_for_adding` and update node attributes 
         # :first param: node for adding
         # :second param pos: posinton in type: tuple[float, float]     
-        
         self.G.add_node(1,pos=(0.002, -0.80))
         self.G.add_node(2, pos=(-0.96, -0.30))
         self.G.add_node(3, pos=(-0.59, 0.81))
@@ -113,7 +111,6 @@ class part1():
         # attr : keyword arguments, optional
             # Edge data (or labels or objects) can be assigned using
             # keyword arguments.
-
         self.G.add_edge(1, 2, color=self.booleanValue(p, 1, 2), weight=1)
         self.G.add_edge(2, 3, color=self.booleanValue(p, 2, 3), weight=2)
         self.G.add_edge(3, 4, color=self.booleanValue(p, 3, 4), weight=3)
@@ -145,20 +142,24 @@ class part1():
         self.G.add_edge(4, 14, color=self.booleanValue(p, 4, 14), weight=29)
         self.G.add_edge(5, 6, color=self.booleanValue(p, 5, 6), weight=30)
         
-    def stateVector(self):
+    def creatingStateVector(self):
         print("DSS")
+        # Printing connected node
         print(list(self.ds.itersets()))
+
+        # get edges from G --> nx.Graph()
         edges = list(self.G.edges())
-        stateVector = {}
+        state = {}
         for i in range(len(edges)):
-            stateVector[edges[i]] = [self.G[u][v]['color'] for u, v in self.G.edges()][i]
-        state = []
-        for k,v in stateVector.items():
-                state.append((k,v))
+
+            # Define state vector  for step 4
+            state[edges[i]] = [self.G[u][v]['color'] for u, v in self.G.edges()][i]
+        for k,v in state.items():
+                self.stateVector.append((k,v))
         
         # Printing stata vector depending on p value
         print("State Vector")
-        print(state)
+        print(self.stateVector)
 
     # dodecahedron network representation
     def graphShow(self):
@@ -170,23 +171,22 @@ class part1():
         # figure object, in a single call.
         plt.subplots(1, 1, figsize=(8, 8))
 
-        # Get node attributes from graph
-        pos = nx.get_node_attributes(self.G, name='pos')
-
-        # Get edge attributes from graph
-        labels = nx.get_edge_attributes(self.G, 'weight')
-
-        self.stateVector()
+        # creating state vector from step 4
+        self.creatingStateVector()
    
         # Draw the graph as a simple representation with no node
         # labels or edge labels and using the full Matplotlib figure area
         # and no axis labels by default.
-        nx.draw(self.G, pos=pos, arrows=False,
+        # :pos: Get node attributes from graph
+        nx.draw(self.G, pos=nx.get_node_attributes(self.G, name='pos'), arrows=False,
                 edge_color=[self.G[u][v]['color'] for u, v in self.G.edges()],
-                node_color='#9eee7e', with_labels=True, width=1.5)
+                node_color='#5e488a', with_labels=True, width=1.5)
         
         # Draw edge labels
-        nx.draw_networkx_edge_labels(self.G, pos, edge_labels=labels)
+        # :pos: Get node attributes from graph
+        # :edge_labels: Get edge attributes from graph
+        nx.draw_networkx_edge_labels(self.G, pos=nx.get_node_attributes(self.G, name='pos'),
+                                     edge_labels=nx.get_edge_attributes(self.G, 'weight'))
 
         # Return the figure manager of the current figure.
         # The figure manager is a container for the actual
@@ -194,21 +194,19 @@ class part1():
         # on screen. If no current figure exists, a new one
         # is created, and its figure manager is returned.
         plt.get_current_fig_manager().window.wm_geometry("+300+25")
-        plt.show()
 
-    
+        #  Display all open figures.
+        plt.show()
 
     # Step 6 using M1
     # Calculating reliability network
     def calculateReliabilityNetworkM1(self):
-        self.R=self.r/self.M1
-        return self.R
+        return self.r/self.M1
 
     # Step 6 using M2
     # Calculating reliability network using M1 
     def calculateReliabilityNetworkM2(self):
-        self.R=self.r/self.M2
-        return self.R
+        return self.r/self.M2
 
     # Step D
     # Craeting table 
@@ -220,14 +218,13 @@ class part1():
             p = "{:.2f}".format(p)
             p = float(p)
     
-  
     # Printing table 
     def printTable(self):
         print("Terminals:"+" T1=" + str(self.T1) + " T2=" + str(self.T2) + " T3=" + str(self.T3))
         print("\n  P    M1   M2\n")
-        for p in self.pValues:
-            print(self.table[p])
+        for p in self.pValues: print(self.table[p])
     
+    # step B
     def calculateDSS(self):
         
         # Return True if T1 and T2 and T3 belong to the same set.
@@ -247,7 +244,7 @@ class part1():
                 # Step 4
                 if True == self.calculateDSS(): self.r+=1
             self.table[p][1] = self.calculateReliabilityNetworkM1()
-                   
+            
             for _ in range(self.M1,self.M2):
                 
                 # Function from according to A
@@ -255,13 +252,9 @@ class part1():
 
                 # Step 4
                 if True == self.calculateDSS(): self.r+=1
-            self.table[p][2] = self.calculateReliabilityNetworkM2()
-            self.r=0
+            self.table[p][2], self.r = self.calculateReliabilityNetworkM2(),0
         self.printTable()
        
-
-
-
 if __name__ == "__main__":
     p=part1(0,0,0)
     p.graphShow() 
