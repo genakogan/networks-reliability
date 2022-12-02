@@ -16,7 +16,7 @@ from disjoint_set import DisjointSet
 import matplotlib.pyplot as plt
 
 
-class part1():
+class Part1():
     def __init__(self,T1=None,T2=None,T3=None):
         self.r=0
 
@@ -254,10 +254,11 @@ class part1():
                 if True == self.calculateDSS(): self.r+=1
             self.table[p][2], self.r = self.calculateReliabilityNetworkM2(),0
         self.printTable()
-       
+
+'''
 if __name__ == "__main__":
     p=part1(2,5,19)
     p.graphShow() 
     p.assessNetworkReliability()
-    
+'''   
     
