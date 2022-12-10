@@ -6,9 +6,10 @@ import itertools
 import numpy as np
 import math
 import pickle
-
-class Part2():
+from part1_dir.part1 import Part1
+class Part2(Part1):
     def __init__(self,T1=None,T2=None,T3=None):
+        
         self.r=0
         self.R=-1
 
@@ -203,7 +204,7 @@ class Part2():
  # --------------------------------------------------------------------------------           
     def destructionSpectra(self):
         tempDict = {}
-        self.makeGraph(1)
+        Part1.makeGraph(self,1)
         for k,v in self.G.edges():
             vertex = self.G[k][v]
             tempDict[vertex['weight']] = [k,v]
@@ -273,6 +274,7 @@ class Part2():
     def nCr(self,n,r):
         f = math.factorial
         return f(n) / f(r) / f(n-r)
+        
     def calcFs(self,p_values):
         f_table={}
         p_table={}
@@ -297,6 +299,7 @@ class Part2():
             p_table[q]=f_table
             f_table = {}
         return p_table
+
     def calcFsMultiplication(self,f_table,tableX,index):
         sum=0
         calcFi = 0
@@ -306,6 +309,7 @@ class Part2():
             sum += calcFi * tableX[k][index]
             calcFi = 0
         return sum
+        
     def part2_2(self):
         self.initTable2()
         p_table=self.calcFs(self.p_values)
@@ -332,27 +336,27 @@ class Part2():
             for i in range(self.M1):
 
                 self.ds = DisjointSet()
-                self.makeGraph(p)
+                Part1.makeGraph(self,p)
                 result = self.calculateDSS()
                 if (result == True):
                     self.r += 1
             self.R = self.r / self.M1
             self.table3[p][1] = self.R
-
+            self.r=0
             for i in range(self.M2):
                 self.ds = DisjointSet()
-                self.makeGraph(p)
+                Part1.makeGraph(self,p)
                 result = self.calculateDSS()
                 if (result == True):
                     self.r += 1
 
             self.R = self.r / self.M2
             self.table3[p][2] = self.R
-
+            self.r=0
 
             for i in range(self.M3):
                 self.ds = DisjointSet()
-                self.makeGraph(p)
+                Part1.makeGraph(self,p)
                 result = self.calculateDSS()
                 if (result == True):
                     self.r += 1
