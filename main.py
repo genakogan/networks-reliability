@@ -1,5 +1,8 @@
 from part2_dir.part2 import Part2
 
-
-x=Part2(2,3,5)
-x.graphShow()
+if __name__ == "__main__":
+    p=Part2(2,5,19)
+    p.part2_1()
+    p.part2_2()
+    p.part2_3()
+    p.printAll()
