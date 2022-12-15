@@ -5,4 +5,7 @@ if __name__ == "__main__":
     p.part2_1()
     p.part2_2()
     p.part2_3()
+    p.part2_4()
+    p.part2_5()
+    p.part2_4_5()
     p.printAll()

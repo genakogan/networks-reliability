@@ -205,8 +205,8 @@ class Part1():
 
     # Step 6 using M2
     # Calculating reliability network using M1 
-    def calculateReliabilityNetworkM2(self):
-        return self.r/self.M2
+    def calculateReliabilityNetwork(self,Mx):
+        return self.r/Mx
 
     # Step D
     # Craeting table 
@@ -243,7 +243,7 @@ class Part1():
 
                 # Step 4
                 if True == self.calculateDSS(): self.r+=1
-            self.table[p][1], self.r = self.calculateReliabilityNetworkM1(),0
+            self.table[p][1], self.r = self.calculateReliabilityNetwork(self.M1),0
             
             for _ in range(self.M2):
                 
@@ -252,7 +252,7 @@ class Part1():
 
                 # Step 4
                 if True == self.calculateDSS(): self.r+=1
-            self.table[p][2], self.r = self.calculateReliabilityNetworkM2(),0
+            self.table[p][2], self.r = self.calculateReliabilityNetwork(self.M2),0
         self.printTable()
 
 '''

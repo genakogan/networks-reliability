@@ -27,10 +27,11 @@ class Part2(Part1):
         self.ds = DisjointSet()
         
         self.edgeDrops = {}
+        self.table = {}
         self.table1 = {}
-        self.table2={}
+        self.table2 = {}
         self.table3 = {}
-        self.table4= {}
+        self.table4 = {}
         self.r = 0
         self.edgeNumbers  = []
         
@@ -57,90 +58,21 @@ class Part2(Part1):
             self.ds.union(nodeU, nodeV)
             return "g"
         return "r"
-    
-    def makeGraph(self,p):
-
-        # Disjoint Set Structures
-        # Using DSS allow us define if edge in UP or in DOWN
-        self.ds=DisjointSet()
-        for i in range(1, 21):
-
-            # find() return the canonical element of a given item.
-            # In case the element was not present in the data structure,
-            # the canonical element is the item itself.
-            self.ds.find(i)
-
-        # Creating state vector 
-        # Add a single node `node_for_adding` and update node attributes 
-        # :first param: node for adding
-        # :second param pos: posinton in type: tuple[float, float]     
-        self.G.add_node(1,pos=(0.002, -0.80))
-        self.G.add_node(2, pos=(-0.96, -0.30))
-        self.G.add_node(3, pos=(-0.59, 0.81))
-        self.G.add_node(4, pos=(0.59, 0.81))
-        self.G.add_node(5, pos=(0.95, -0.31))
-        self.G.add_node(6, pos=(2.367, -0.75))
-        self.G.add_node(7, pos=(1.76, -2.43))
-        self.G.add_node(8, pos=(0.00, -2.5))
-        self.G.add_node(9, pos=(-1.76, -2.43))
-        self.G.add_node(10, pos=(-2.3, -0.78))
-        self.G.add_node(11, pos=(-2.85, 0.93))
-        self.G.add_node(12, pos=(-1.461, 2.04))
-        self.G.add_node(13, pos=(0, 3.0))
-        self.G.add_node(14, pos=(1.4, 1.99))
-        self.G.add_node(15, pos=(2.85, 0.93))
-        self.G.add_node(16, pos=(4.76, 1.55))
-        self.G.add_node(17, pos=(2.94, -4.04))
-        self.G.add_node(18, pos=(-2.91, -4.04))
-        self.G.add_node(19, pos=(-4.76, 1.55))
-        self.G.add_node(20, pos=(0, 5.0))
-
-        # Add an edge between u and v. The nodes u and v will be
-        # automatically added if they are not already in the graph.
-        # Edge attributes can be specified with keywords or by 
-        # directly accessing the edge's attribute dictionary. 
-        # :first and second params: nodes
-            # Nodes can be, for example, strings or numbers.
-            # Nodes must be hashable (and not None) Python objects.
-        # attr : keyword arguments, optional
-            # Edge data (or labels or objects) can be assigned using
-            # keyword arguments.
-        self.G.add_edge(1, 2, color=self.booleanValue(p, 1, 2), weight=1)
-        self.G.add_edge(2, 3, color=self.booleanValue(p, 2, 3), weight=2)
-        self.G.add_edge(3, 4, color=self.booleanValue(p, 3, 4), weight=3)
-        self.G.add_edge(4, 5, color=self.booleanValue(p, 4, 5), weight=4)
-        self.G.add_edge(5, 1, color=self.booleanValue(p, 5, 1), weight=5)
-        self.G.add_edge(6, 7, color=self.booleanValue(p, 6, 7), weight=6)
-        self.G.add_edge(7, 8, color=self.booleanValue(p, 7, 8), weight=7)
-        self.G.add_edge(8, 9, color=self.booleanValue(p, 8, 9), weight=8)
-        self.G.add_edge(9, 10, color=self.booleanValue(p, 9, 10), weight=9)
-        self.G.add_edge(10, 11, color=self.booleanValue(p, 10, 11), weight=10)
-        self.G.add_edge(11, 12, color=self.booleanValue(p, 11, 12), weight=11)
-        self.G.add_edge(12, 13, color=self.booleanValue(p, 12, 13), weight=12)
-        self.G.add_edge(13, 14, color=self.booleanValue(p, 13, 14), weight=13)
-        self.G.add_edge(14, 15, color=self.booleanValue(p, 14, 15), weight=14)
-        self.G.add_edge(15, 6, color=self.booleanValue(p, 15, 6), weight=15)
-        self.G.add_edge(16, 17, color=self.booleanValue(p, 16, 17), weight=16)
-        self.G.add_edge(17, 18, color=self.booleanValue(p, 17, 18), weight=17)
-        self.G.add_edge(18, 19, color=self.booleanValue(p, 18, 19), weight=18)
-        self.G.add_edge(19, 20, color=self.booleanValue(p, 19, 20), weight=19)
-        self.G.add_edge(20, 16, color=self.booleanValue(p, 20, 16), weight=20)
-        self.G.add_edge(15, 16, color=self.booleanValue(p, 15, 16), weight=21)
-        self.G.add_edge(7, 17, color=self.booleanValue(p, 7, 17), weight=22)
-        self.G.add_edge(9, 18, color=self.booleanValue(p, 9, 18), weight=23)
-        self.G.add_edge(11, 19, color=self.booleanValue(p, 11, 19), weight=24)
-        self.G.add_edge(20, 13, color=self.booleanValue(p, 20, 13), weight=25)
-        self.G.add_edge(1, 8, color=self.booleanValue(p, 1, 8), weight=26)
-        self.G.add_edge(2, 10, color=self.booleanValue(p, 2, 10), weight=27)
-        self.G.add_edge(3, 12, color=self.booleanValue(p, 3, 12), weight=28)
-        self.G.add_edge(4, 14, color=self.booleanValue(p, 4, 14), weight=29)
-        self.G.add_edge(5, 6, color=self.booleanValue(p, 5, 6), weight=30)
-
+   
     def calculateDSS(self):
     
         # Return True if T1 and T2 and T3 belong to the same set.
         return self.ds.connected(self.T1,self.T2) and self.ds.connected(self.T2,self.T3)
 
+# Tables
+
+    def initTable(self):
+        p = 1
+        for i in range(1,31):
+            self.table[i] = [i, -1, -1, -1]
+
+
+    # Table 1
     # --------------------------------------------
     def initTable1(self):
         p = 1
@@ -151,6 +83,7 @@ class Part2(Part1):
         for p in range(1, 31):
             print(self.table1[p])
 
+    # Table 2
     # --------------------------------------------
     def initTable2(self):
         p = 0.01
@@ -164,6 +97,7 @@ class Part2(Part1):
         for p in self.p_values:
             print(self.table2[p])
 
+    # Table 3
     # --------------------------------------------
     def initTable3(self):
         p = 0.01
@@ -177,31 +111,51 @@ class Part2(Part1):
         for p in self.p_values:
             print(self.table3[p])
 
+    # Table 4
+    # --------------------------------------------
+    
+    def initTable4(self):
+        p = 0.01
+        for i in range(1,11):
+            self.table4[i] = [i,-1,-1]
+        self.table4["r.e"]=["r.e=",-1,-1]
 
+    def printTable4(self):
+        print("Destraction Spectrum R(N;p=0.95)")
+        for i in range(1, 11):
+            print(self.table4[i])
+        print(self.table4["r.e"])
+       
     def printAll(self):
         print("T1=" + str(self.T1) + " T2=" + str(self.T2) + " T3=" + str(self.T3))
         print("-----------------------------------")
         print("Random Permutation:")
         print(self.randomParmutation)
+
         print("-----------------------------------")
-        
         print("Table 1: Destruction Spectra:")
         print("  i    M1=1000   M2=10,000  M3=50,000")
         self.printTable1()
-        print("-----------------------------------")
 
+        print("-----------------------------------")
         print("Table 2: R(N;P)(Destruction Spectrum)")
         print("  p    M1=1000   M2=10,000  M3=50,000")
         self.printTable2()
+
         print("-----------------------------------")
         print("Table 3: R(N;P)(Destruction Spectrum)")
         print("  i    M1=1000   M2=10,000  M3=50,000")
         self.printTable3()
+
+        print("-----------------------------------")
+        print("Table 4: R(N;p = 0.95)")
+        self.printTable4()
+
     def makeDSS(self):
         for i in range(1, 21):
             self.ds.find(i)
-
- # --------------------------------------------------------------------------------           
+# Part 2_1
+# --------------------------------------------------------------------------------           
     def destructionSpectra(self):
         tempDict = {}
         Part1.makeGraph(self,1)
@@ -220,7 +174,7 @@ class Part2(Part1):
             for u,v in self.G.edges():
                 if self.G[u][v]['color'] == 'g':
                     self.ds.union(u, v)
-            result = self.calculateDSS()
+            result = Part1.calculateDSS(self)
             if result == True:
                 self.r += 1
             else:
@@ -269,7 +223,7 @@ class Part2(Part1):
 
         with open('table1.pickle', 'rb') as handle:
             self.table1 = pickle.load(handle)
-
+# Part 2_2
 # -------------------------------------------------------------------------------- 
     def nCr(self,n,r):
         f = math.factorial
@@ -328,56 +282,127 @@ class Part2(Part1):
 
         with open('table2.pickle', 'rb') as handle:
             self.table2 = pickle.load(handle)
-
+# Part 2_3
 # --------------------------------------------------------------------------------     
+
     def part2_3(self):
         self.initTable3()
         for p in self.p_values:
-            for i in range(self.M1):
+            for _ in range(self.M1):
 
                 self.ds = DisjointSet()
                 Part1.makeGraph(self,p)
-                result = self.calculateDSS()
+                result = Part1.calculateDSS(self)
                 if (result == True):
                     self.r += 1
-            self.R = self.r / self.M1
-            self.table3[p][1] = self.R
-            self.r=0
-            for i in range(self.M2):
+                       
+            self.table3[p][1],self.r = Part1.calculateReliabilityNetwork(self,self.M1),0
+          
+            for _ in range(self.M2):
                 self.ds = DisjointSet()
                 Part1.makeGraph(self,p)
-                result = self.calculateDSS()
+                result = Part1.calculateDSS(self)
                 if (result == True):
                     self.r += 1
+           
+            self.table3[p][2],self.r = Part1.calculateReliabilityNetwork(self,self.M2),0
 
-            self.R = self.r / self.M2
-            self.table3[p][2] = self.R
-            self.r=0
-
-            for i in range(self.M3):
+            for _ in range(self.M3):
                 self.ds = DisjointSet()
                 Part1.makeGraph(self,p)
-                result = self.calculateDSS()
+                result = Part1.calculateDSS(self)
                 if (result == True):
                     self.r += 1
 
-            self.R = self.r / self.M3
-            self.table3[p][3] = self.R
-
-            self.r = 0
-
-        #printTable3(p_values)
+            self.table3[p][3], self.r = Part1.calculateReliabilityNetwork(self,self.M3),0
+     
         with open('table3.pickle', 'wb') as handle:
             pickle.dump(self.table3, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
         #part 3 output --- done ---- !
         with open('table3.pickle', 'rb') as handle:
             self.table3 = pickle.load(handle)
-#printTable3(p_values)
-#printTable3(p_values)
-if __name__ == "__main__":
-    p=Part2(2,5,19)
-    p.part2_1()
-    p.part2_2()
-    p.part2_3()
-    p.printAll()
+
+# Part 2_4
+# --------------------------------------------------------------------------------
+    
+    def part2_4(self):
+        table = {}
+        self.initTable4()
+        for i in range(1,31):
+            table[i] = [i, -1, -1, -1]
+
+        for i in range (1,11):
+            self.edgeDrops = {}
+            for h in range(1, 31):
+                self.edgeDrops[h] = 0
+
+            for j in range (self.M1):
+                self.randomParmutation = list(np.random.permutation(self.edgeNumbers))
+                self.r = 0
+                self.destructionSpectra()
+            for k,v in self.edgeDrops.items():
+                table[k][1] = self.edgeDrops[k] / self.M1
+
+            p_table=self.calcFs([0.95])
+            f_table=p_table[0.95]
+
+
+            result=self.calcFsMultiplication(f_table, table,1)
+
+            self.table4[i][1]=result
+
+        with open('table4.pickle', 'wb') as handle:
+            pickle.dump(self.table4, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
+        with open('table4.pickle', 'rb') as handle:
+            self.table4 = pickle.load(handle)
+
+# Part 2_5
+# --------------------------------------------------------------------------------
+    def relativeError(self, values):
+        avrg, S, sum = 0,0,0
+        
+
+        for value in values:
+            avrg+= value
+        avrg  = avrg / len(values)
+
+        for value in values:
+            power = math.pow((value - avrg),2)
+            sum += power
+
+        S = math.sqrt(sum/(len(values) - 1 ))
+        return S/avrg
+    
+    def part2_5(self):
+       for j in range(1,11):
+            self.r = 0
+            for i in range(self.M1):
+
+                self.ds = DisjointSet()
+                Part1.makeGraph(self,0.95)
+                result = Part1.calculateDSS(self)
+                if (result == True):
+                    self.r += 1
+            R = self.r / self.M1
+            self.table4[j][2] = R
+            self.r = 0
+
+    def part2_4_5(self):
+        r_e4 = []
+        r_e5 = []
+        for k,v in self.table4.items():
+            r_e4.append(v[1])
+            r_e5.append(v[2])
+        del r_e4[-1]
+        del r_e5[-1]
+        r_e4 = self.relativeError(r_e4)
+        r_e5 = self.relativeError(r_e5)
+        self.table4["r.e"][1] = r_e4
+        self.table4["r.e"][2] = r_e5
+    
+        with open('table4.pickle', 'wb') as handle:
+            pickle.dump(self.table4, handle, protocol=pickle.HIGHEST_PROTOCOL)
+        with open('table4.pickle', 'rb') as handle:
+            self.table4 = pickle.load(handle)
