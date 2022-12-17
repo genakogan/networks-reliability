@@ -10,59 +10,25 @@ from part1_dir.part1 import Part1
 class Part2(Part1):
     def __init__(self,T1=None,T2=None,T3=None):
         
-        self.r=0
-        self.R=-1
+        Part1.__init__(self,T1=None,T2=None,T3=None)
+        
 
         self.T1=T1
         self.T2=T2
         self.T3=T3
 
-        self.M1 = 1000
-        self.M2 = 10000
         self.M3 = 50000
-        
-        self.p_values = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,0.95,0.99]
-
-        self.G = nx.Graph()
-        self.ds = DisjointSet()
-        
+               
         self.edgeDrops = {}
         self.table = {}
         self.table1 = {}
         self.table2 = {}
         self.table3 = {}
         self.table4 = {}
-        self.r = 0
         self.edgeNumbers  = []
         
         self.randomParmutation =[]
        
-
-    # Help function for edge settings. accorsing to step 3
-    def booleanValue(self,p,nodeU, nodeV):
-
-        # step 3.1
-        # random.uniform(0, 1)
-        # Return a random number between, and included, 0 and 1:
-        value = random.uniform(0, 1)
-        
-        # step 3.2
-        # if p >= value graph edge in UP else Down
-        # g --> up
-        # r --> down
-        if value <= p:
-
-            # Attach the roots of x and y trees together if they are not the same already.
-            # :param x: first element
-            # :param y: second element
-            self.ds.union(nodeU, nodeV)
-            return "g"
-        return "r"
-   
-    def calculateDSS(self):
-    
-        # Return True if T1 and T2 and T3 belong to the same set.
-        return self.ds.connected(self.T1,self.T2) and self.ds.connected(self.T2,self.T3)
 
 # Tables
 
@@ -94,7 +60,7 @@ class Part2(Part1):
             p = float(p)
 
     def printTable2(self):
-        for p in self.p_values:
+        for p in self.pValues:
             print(self.table2[p])
 
     # Table 3
@@ -108,7 +74,7 @@ class Part2(Part1):
             p = float(p)
 
     def printTable3(self):
-        for p in self.p_values:
+        for p in self.pValues:
             print(self.table3[p])
 
     # Table 4
@@ -151,9 +117,7 @@ class Part2(Part1):
         print("Table 4: R(N;p = 0.95)")
         self.printTable4()
 
-    def makeDSS(self):
-        for i in range(1, 21):
-            self.ds.find(i)
+    
 # Part 2_1
 # --------------------------------------------------------------------------------           
     def destructionSpectra(self):
@@ -162,14 +126,14 @@ class Part2(Part1):
         for k,v in self.G.edges():
             vertex = self.G[k][v]
             tempDict[vertex['weight']] = [k,v]
-        #G[][]['color'] = 'r'
+       
         for edge in self.randomParmutation:
             vertex = tempDict[edge]
             edge = self.G[vertex[0]][vertex[1]]
             edge['color'] = 'r'
-
             self.ds = DisjointSet()
-            self.makeDSS()
+            for i in range(1, 21):
+                self.ds.find(i)
 
             for u,v in self.G.edges():
                 if self.G[u][v]['color'] == 'g':
@@ -191,6 +155,7 @@ class Part2(Part1):
 
         for i in range(self.M1):
             self.randomParmutation = list(np.random.permutation(self.edgeNumbers))
+           
             self.r = 0
             self.destructionSpectra()
         for k,v in self.edgeDrops.items():
@@ -227,12 +192,12 @@ class Part2(Part1):
 # -------------------------------------------------------------------------------- 
     def nCr(self,n,r):
         f = math.factorial
-        return f(n) / f(r) / f(n-r)
+        return f(n) / (f(r) * f(n-r))
         
-    def calcFs(self,p_values):
+    def calcFs(self,pValues):
         f_table={}
         p_table={}
-        for q in p_values:
+        for q in pValues:
             p = 1 - q
             q = float(q)
             p = float(p)
@@ -266,9 +231,9 @@ class Part2(Part1):
         
     def part2_2(self):
         self.initTable2()
-        p_table=self.calcFs(self.p_values)
+        p_table=self.calcFs(self.pValues)
 
-        for p in self.p_values:
+        for p in self.pValues:
             f_table=p_table[p]
             for i in range (1,4):
                 result=self.calcFsMultiplication(f_table,self.table1,i)
@@ -287,7 +252,7 @@ class Part2(Part1):
 
     def part2_3(self):
         self.initTable3()
-        for p in self.p_values:
+        for p in self.pValues:
             for _ in range(self.M1):
 
                 self.ds = DisjointSet()
@@ -363,7 +328,6 @@ class Part2(Part1):
     def relativeError(self, values):
         avrg, S, sum = 0,0,0
         
-
         for value in values:
             avrg+= value
         avrg  = avrg / len(values)

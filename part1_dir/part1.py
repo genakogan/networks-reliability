@@ -41,7 +41,12 @@ class Part1():
         self.T1=T1
         self.T2=T2
         self.T3=T3
-   
+    def getM1(self):
+        return self.M1
+    def getM2(self):
+        return self.M2
+    def getPValues(self):
+        return self.pValues
     # Help function for edge settings. accorsing to step 3
     def booleanValue(self,p,nodeU, nodeV):
 
