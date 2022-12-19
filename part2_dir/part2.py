@@ -7,117 +7,34 @@ import numpy as np
 import math
 import pickle
 from part1_dir.part1 import Part1
-class Part2(Part1):
+from part2_dir.table import Tables
+
+class Part2(Part1,Tables):
     def __init__(self,T1=None,T2=None,T3=None):
         
         Part1.__init__(self,T1=None,T2=None,T3=None)
+        Tables.__init__(self)
         
-
         self.T1=T1
         self.T2=T2
         self.T3=T3
 
         self.M3 = 50000
                
-        self.edgeDrops = {}
+       
         self.table = {}
         self.table1 = {}
         self.table2 = {}
         self.table3 = {}
         self.table4 = {}
+
+        self.edgeDrops = {}
+
         self.edgeNumbers  = []
-        
         self.randomParmutation =[]
        
-
-# Tables
-
-    def initTable(self):
-        p = 1
-        for i in range(1,31):
-            self.table[i] = [i, -1, -1, -1]
-
-
-    # Table 1
-    # --------------------------------------------
-    def initTable1(self):
-        p = 1
-        for i in range(1,31):
-            self.table1[i] = [i, -1, -1, -1]
-
-    def printTable1(self):
-        for p in range(1, 31):
-            print(self.table1[p])
-
-    # Table 2
-    # --------------------------------------------
-    def initTable2(self):
-        p = 0.01
-        for i in range(99):
-            self.table2[p] = [p, -1, -1,-1]
-            p += 0.01
-            p = "{:.2f}".format(p)
-            p = float(p)
-
-    def printTable2(self):
-        for p in self.pValues:
-            print(self.table2[p])
-
-    # Table 3
-    # --------------------------------------------
-    def initTable3(self):
-        p = 0.01
-        for i in range(99):
-            self.table3[p] = [p, -1, -1, -1]
-            p += 0.01
-            p = "{:.2f}".format(p)
-            p = float(p)
-
-    def printTable3(self):
-        for p in self.pValues:
-            print(self.table3[p])
-
-    # Table 4
-    # --------------------------------------------
-    
-    def initTable4(self):
-        p = 0.01
-        for i in range(1,11):
-            self.table4[i] = [i,-1,-1]
-        self.table4["r.e"]=["r.e=",-1,-1]
-
-    def printTable4(self):
-        print("Destraction Spectrum R(N;p=0.95)")
-        for i in range(1, 11):
-            print(self.table4[i])
-        print(self.table4["r.e"])
-       
-    def printAll(self):
-        print("T1=" + str(self.T1) + " T2=" + str(self.T2) + " T3=" + str(self.T3))
-        print("-----------------------------------")
-        print("Random Permutation:")
-        print(self.randomParmutation)
-
-        print("-----------------------------------")
-        print("Table 1: Destruction Spectra:")
-        print("  i    M1=1000   M2=10,000  M3=50,000")
-        self.printTable1()
-
-        print("-----------------------------------")
-        print("Table 2: R(N;P)(Destruction Spectrum)")
-        print("  p    M1=1000   M2=10,000  M3=50,000")
-        self.printTable2()
-
-        print("-----------------------------------")
-        print("Table 3: R(N;P)(Destruction Spectrum)")
-        print("  i    M1=1000   M2=10,000  M3=50,000")
-        self.printTable3()
-
-        print("-----------------------------------")
-        print("Table 4: R(N;p = 0.95)")
-        self.printTable4()
-
-    
+ 
+        
 # Part 2_1
 # --------------------------------------------------------------------------------           
     def destructionSpectra(self):
@@ -146,7 +63,7 @@ class Part2(Part1):
                 break
 
     def part2_1(self):
-        self.initTable1()
+        Tables.initTable1(self)
         for i in range(1,31):
             self.edgeNumbers.append(i)
             self.edgeDrops[i] = 0
@@ -154,11 +71,9 @@ class Part2(Part1):
             self.edgeDrops[i] = 0
 
         for i in range(self.M1):
-            self.randomParmutation = list(np.random.permutation(self.edgeNumbers))
-           
-            self.r = 0
+            self.randomParmutation,self.r = list(np.random.permutation(self.edgeNumbers)),0
             self.destructionSpectra()
-        for k,v in self.edgeDrops.items():
+        for k, _ in self.edgeDrops.items():
             self.table1[k][1] = self.edgeDrops[k] / self.M1
 
         self.edgeDrops={}
@@ -166,10 +81,9 @@ class Part2(Part1):
              self.edgeDrops[i] = 0
 
         for i in range(self.M2):
-            self.randomParmutation = list(np.random.permutation(self.edgeNumbers))
-            self.r = 0
+            self.randomParmutation,self.r = list(np.random.permutation(self.edgeNumbers)),0
             self.destructionSpectra()
-        for k,v in  self.edgeDrops.items():
+        for k,_ in  self.edgeDrops.items():
             self.table1[k][2] =  self.edgeDrops[k] / self.M2
 
         self.edgeDrops={}
@@ -177,10 +91,9 @@ class Part2(Part1):
              self.edgeDrops[i] = 0
 
         for i in range(self.M3):
-            self.randomParmutation = list(np.random.permutation(self.edgeNumbers))
-            self.r = 0
+            self.randomParmutation,self.r = list(np.random.permutation(self.edgeNumbers)),0
             self.destructionSpectra()
-        for k,v in  self.edgeDrops.items():
+        for k,_ in  self.edgeDrops.items():
             self.table1[k][3] =  self.edgeDrops[k] /self.M3
 
         with open('table1.pickle', 'wb') as handle:
@@ -195,13 +108,10 @@ class Part2(Part1):
         return f(n) / (f(r) * f(n-r))
         
     def calcFs(self,pValues):
-        f_table={}
-        p_table={}
+        f_table, p_table={},{}
         for q in pValues:
             p = 1 - q
-            q = float(q)
-            p = float(p)
-
+            q, p  = float(q),float(p)
             p = round(p,2)
             for n in range(1,31):
                 for k in range(1,30 - n + 2):
@@ -211,9 +121,7 @@ class Part2(Part1):
 
                     p_n_minus_k=pow(p,(30-k))
 
-                    resultTemp= ncrr* q_pow_k * p_n_minus_k
-
-                f_table[n] = resultTemp
+                f_table[n] = ncrr* q_pow_k * p_n_minus_k
 
             p_table[q]=f_table
             f_table = {}
@@ -302,20 +210,16 @@ class Part2(Part1):
             for h in range(1, 31):
                 self.edgeDrops[h] = 0
 
-            for j in range (self.M1):
-                self.randomParmutation = list(np.random.permutation(self.edgeNumbers))
-                self.r = 0
+            for _ in range (self.M1):
+                self.randomParmutation, self.r= list(np.random.permutation(self.edgeNumbers)),0
                 self.destructionSpectra()
-            for k,v in self.edgeDrops.items():
+            for k, _ in self.edgeDrops.items():
                 table[k][1] = self.edgeDrops[k] / self.M1
 
             p_table=self.calcFs([0.95])
             f_table=p_table[0.95]
 
-
-            result=self.calcFsMultiplication(f_table, table,1)
-
-            self.table4[i][1]=result
+            self.table4[i][1]=self.calcFsMultiplication(f_table, table,1)
 
         with open('table4.pickle', 'wb') as handle:
             pickle.dump(self.table4, handle, protocol=pickle.HIGHEST_PROTOCOL)
@@ -326,47 +230,63 @@ class Part2(Part1):
 # Part 2_5
 # --------------------------------------------------------------------------------
     def relativeError(self, values):
-        avrg, S, sum = 0,0,0
-        
+        avrg, sum = 0,0,0
         for value in values:
             avrg+= value
-        avrg  = avrg / len(values)
 
         for value in values:
-            power = math.pow((value - avrg),2)
-            sum += power
+            sum += math.pow((value - avrg),2)
 
-        S = math.sqrt(sum/(len(values) - 1 ))
-        return S/avrg
+        return math.sqrt(sum/(len(values) - 1 ))/avrg/len(values)
     
     def part2_5(self):
        for j in range(1,11):
             self.r = 0
-            for i in range(self.M1):
-
+            for _ in range(self.M1):
                 self.ds = DisjointSet()
                 Part1.makeGraph(self,0.95)
                 result = Part1.calculateDSS(self)
                 if (result == True):
                     self.r += 1
-            R = self.r / self.M1
-            self.table4[j][2] = R
+            self.table4[j][2]= self.r / self.M1
             self.r = 0
 
     def part2_4_5(self):
-        r_e4 = []
-        r_e5 = []
-        for k,v in self.table4.items():
+        r_e4, r_e5 = [],[]
+        for _,v in self.table4.items():
             r_e4.append(v[1])
             r_e5.append(v[2])
         del r_e4[-1]
         del r_e5[-1]
-        r_e4 = self.relativeError(r_e4)
-        r_e5 = self.relativeError(r_e5)
-        self.table4["r.e"][1] = r_e4
-        self.table4["r.e"][2] = r_e5
+        self.table4["r.e"][1] = self.relativeError(r_e4)
+        self.table4["r.e"][2] = self.relativeError(r_e5)
     
         with open('table4.pickle', 'wb') as handle:
             pickle.dump(self.table4, handle, protocol=pickle.HIGHEST_PROTOCOL)
         with open('table4.pickle', 'rb') as handle:
             self.table4 = pickle.load(handle)
+
+    def printAll(self):
+        print("T1=" + str(self.T1) + " T2=" + str(self.T2) + " T3=" + str(self.T3))
+        print("-----------------------------------")
+        print("Random Permutation:")
+        print(self.randomParmutation)
+
+        print("-----------------------------------")
+        print("Table 1: Destruction Spectra:")
+        print("  i    M1=1000   M2=10,000  M3=50,000")
+        Tables.printTable1(self)
+
+        print("-----------------------------------")
+        print("Table 2: R(N;P)(Destruction Spectrum)")
+        print("  p    M1=1000   M2=10,000  M3=50,000")
+        Tables.printTable2(self)
+
+        print("-----------------------------------")
+        print("Table 3: R(N;P)(Destruction Spectrum)")
+        print("  i    M1=1000   M2=10,000  M3=50,000")
+        Tables.printTable3(self)
+
+        print("-----------------------------------")
+        print("Table 4: R(N;p = 0.95)")
+        Tables.printTable4(self)
