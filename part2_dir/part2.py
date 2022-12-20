@@ -1,8 +1,4 @@
-import networkx as nx
-import matplotlib.pyplot as plt
-import random
 from disjoint_set import DisjointSet
-import itertools
 import numpy as np
 import math
 import pickle
@@ -43,33 +39,31 @@ class Part2(Part1,Tables):
         for k,v in self.G.edges():
             vertex = self.G[k][v]
             tempDict[vertex['weight']] = [k,v]
-       
+        
         for edge in self.randomParmutation:
             vertex = tempDict[edge]
             edge = self.G[vertex[0]][vertex[1]]
             edge['color'] = 'r'
             self.ds = DisjointSet()
+            
             for i in range(1, 21):
                 self.ds.find(i)
 
             for u,v in self.G.edges():
                 if self.G[u][v]['color'] == 'g':
                     self.ds.union(u, v)
-            result = Part1.calculateDSS(self)
-            if result == True:
-                self.r += 1
+            if  True == self.calculateDSS(): self.r += 1
             else:
                 self.edgeDrops[self.r] += 1
                 break
+
 
     def part2_1(self):
         Tables.initTable1(self)
         for i in range(1,31):
             self.edgeNumbers.append(i)
             self.edgeDrops[i] = 0
-        for i in range(1, 31):
-            self.edgeDrops[i] = 0
-
+       
         for i in range(self.M1):
             self.randomParmutation,self.r = list(np.random.permutation(self.edgeNumbers)),0
             self.destructionSpectra()
@@ -116,11 +110,8 @@ class Part2(Part1,Tables):
             for n in range(1,31):
                 for k in range(1,30 - n + 2):
                     ncrr=int(self.nCr(30,k))
-
                     q_pow_k=math.pow(q,k)
-
                     p_n_minus_k=pow(p,(30-k))
-
                 f_table[n] = ncrr* q_pow_k * p_n_minus_k
 
             p_table[q]=f_table
@@ -130,7 +121,7 @@ class Part2(Part1,Tables):
     def calcFsMultiplication(self,f_table,tableX,index):
         sum=0
         calcFi = 0
-        for k,v in tableX.items(): # K is row number
+        for k, _ in tableX.items(): # K is row number
             for value in range(1,k):
                 calcFi += f_table[value]
             sum += calcFi * tableX[k][index]
@@ -230,7 +221,7 @@ class Part2(Part1,Tables):
 # Part 2_5
 # --------------------------------------------------------------------------------
     def relativeError(self, values):
-        avrg, sum = 0,0,0
+        avrg, sum = 0,0
         for value in values:
             avrg+= value
 

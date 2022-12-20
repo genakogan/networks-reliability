@@ -1,9 +1,7 @@
 # Genady Kogan
 
 # dependency
-import os
 import random
-import sys
 
 #Data structures for graphs, digraphs, and multigraphs
 #Many standard graph algorithms
