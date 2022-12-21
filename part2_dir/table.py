@@ -1,4 +1,4 @@
-
+from tabulate import tabulate
 
 class Tables():
     def __init__(self):
@@ -8,10 +8,14 @@ class Tables():
         self.table3 = {}
         self.table4 = {}
     
+    # Part 2
+    # --------------------------------------------
+
+    # Table 
+    # --------------------------------------------    
     def initTable(self):
         for i in range(1,31):
             self.table[i] = [i, -1, -1, -1]
-
 
     # Table 1
     # --------------------------------------------
@@ -65,4 +69,18 @@ class Tables():
             print(self.table4[i])
         print(self.table4["r.e"])
 
+    # Part 3
+    # --------------------------------------------
 
+    def initTable1Part3(self):
+        p = 1
+        for i in range(1, 31):
+            self.table1[i] = [i, -1, -1]
+
+    def printTable1Part3(self):
+        res={'Index':[],'M1':[],'M2':[]}
+        for i in self.table1:
+            res['Index'].append(self.table1[i][0])
+            res['M1'].append(self.table1[i][1])
+            res['M2'].append(self.table1[i][2])
+        print(tabulate(res, headers="keys"))

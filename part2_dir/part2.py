@@ -256,7 +256,7 @@ class Part2(Part1,Tables):
             pickle.dump(self.table4, handle, protocol=pickle.HIGHEST_PROTOCOL)
         with open('table4.pickle', 'rb') as handle:
             self.table4 = pickle.load(handle)
-
+    
     def printAll(self):
         print("T1=" + str(self.T1) + " T2=" + str(self.T2) + " T3=" + str(self.T3))
         print("-----------------------------------")

@@ -1,7 +1,5 @@
 
 from part2_dir.part2 import Part2
-
-
 from part3_dir.part3 import Part3
 
 if __name__ == "__main__":
@@ -17,3 +15,4 @@ if __name__ == "__main__":
     '''
     p=Part3(2,5,19)
     p.part3_1()
+    p.printAllPart3()

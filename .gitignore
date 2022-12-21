@@ -1,2 +1,5 @@
 env
 .vscode
+part1_dir/__pycache__
+part2_dir/__pycache__
+part3_dir/__pycache__
