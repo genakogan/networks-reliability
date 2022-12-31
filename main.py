@@ -10,9 +10,11 @@ if __name__ == "__main__":
     p.part2_3()
     p.part2_4()
     p.part2_5()
-    p.part2_4_5()
+    p.part2_4_5() 
     p.printAll()
     '''
     p=Part3(2,5,19)
-    p.part3_1()
+    p.part3_1() 
+    p.part3_2()
     p.printAllPart3()
+ 
