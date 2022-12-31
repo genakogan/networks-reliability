@@ -7,6 +7,7 @@ class Tables():
         self.table2 = {}
         self.table3 = {}
         self.table4 = {}
+        self.table2Part3_2 = {}
     
     # Part 2
     # --------------------------------------------
@@ -83,4 +84,21 @@ class Tables():
             res['Index'].append(self.table1[i][0])
             res['M1'].append(self.table1[i][1])
             res['M2'].append(self.table1[i][2])
+        print(tabulate(res, headers="keys"))
+
+    def inittable2Part3_2(self):
+        print("asdasdsd")
+        p = 0.01
+        for i in range(99):
+            self.table2Part3_2[p] = [p, -1, -1, -1]
+            p += 0.01
+            p = "{:.2f}".format(p)
+            p = float(p)
+
+    def printTable2Part3(self):
+        res = { '9M1000': [], '9M10000': [],'16M1000': [], '16M10000': [],'15M1000': [], '15M10000': [],'21M1000': [], '21M10000': []}
+        for edge in  self.table2Part3_2.items():
+            for M in edge[1].items():
+                for i in M[1]:
+                    res[str(edge[0])+'M'+str(M[0])].append(M[1][i])
         print(tabulate(res, headers="keys"))
