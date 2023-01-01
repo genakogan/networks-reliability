@@ -16,5 +16,6 @@ if __name__ == "__main__":
     p=Part3(2,5,19)
     p.part3_1() 
     p.part3_2()
+    p.part3_4()
     p.printAllPart3()
- 
+  

@@ -6,6 +6,8 @@ import numpy as np
 import math
 import pickle
 
+from tabulate import tabulate
+
 
 
 from part2_dir.part2 import Part2
@@ -26,6 +28,8 @@ class Part3(Part2):
         self.b = {}
         self.r=0
         self.table2Part3_2 = {}
+
+        self.table3 = {}
 
     def part3_1(self):
        
@@ -81,7 +85,7 @@ class Part3(Part2):
 
 
     def destructionBimSpectra(self):
-
+        
         tempDict = {}
         self.makeGraph(1)
         for k, v in self.G.edges():
@@ -112,7 +116,7 @@ class Part3(Part2):
                     self.r += 1
 
                 break
-
+# ------------------------------------------------------------------------------------
     def part3_2(self):
         
         self.table2Part3_2 = {}
@@ -211,10 +215,103 @@ class Part3(Part2):
         with open('table2.pickle', 'wb') as handle:
             pickle.dump(self.table2Part3_2, handle, protocol=pickle.HIGHEST_PROTOCOL)
         with open('table2.pickle', 'rb') as handle:
-            print("asddad")
             self.table2Part3_2 = pickle.load(handle)
 
+# ------------------------------------------------------------------------------------
+    
+    def part3_4(self):
+       
+        def calcBim(j, p,Z, Y, n=30):
+            res = 0
+            for i in range(1, n+1):
+                z = Z[i][j]
+                y = Y[i]
+                pq = math.pow(1-p, (i - 1)) * math.pow(p, (n - i))
+                pq2 = math.pow(1-p, i) * math.pow(p, (n - i - 1))
+                divENbas = math.factorial(i) * math.factorial(n - i)
+                natz=math.factorial(n)
+                droit=(y - z) * pq2
+                gauche=(z * pq)
+                bim = (gauche-droit)*natz
+                bim/=divENbas
+                res += bim
+            return abs(res)
 
+        edgeDrops = {}
+        self.a = {}
+        b = {}
+        for i in range(1, 31):
+            edgeDrops[i] = 0
+        for i in range(1, 31):
+            self.a[i] = 0
+            temp = {}
+            for j in range(1, 31):
+                temp[j] = 0
+            b[i] = temp
+        for i in range(self.M2):
+            self.randomParmutation = list(np.random.permutation(self.edgeNumbers))
+            self.r = 0
+            self.destructionBimSpectra()
+        Z = {}
+        Y = {}
+        tempEdgeDrops={}
+        for k in range(1,31):
+            if k==1:
+                tempEdgeDrops[k]=self.a[k]
+            else:
+                tempEdgeDrops[k] = tempEdgeDrops[k-1]+self.a[k]
+
+        a=tempEdgeDrops
+        for i in range(1, 31):
+            Z[i] = {}
+            Y[i] = self.a[i] / self.M2
+            for j in range(1, 31):
+                
+                Z[i][j] = b[i][j] / self.M2
+
+        with open('Y.pickle', 'wb') as handle:
+            pickle.dump(Y, handle, protocol=pickle.HIGHEST_PROTOCOL)
+        with open('Z.pickle', 'wb') as handle:
+            pickle.dump(Z, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
+        self.table3={}
+        P = [0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+        for p in P:
+           
+            self.table3[p]={
+                 
+                'BIM9':calcBim(9,p,Z,Y),
+                'BIM9Sp':calcBim(9,p,Z,Y)*(1-p),
+                'BIM16':calcBim(16,p,Z,Y),
+                'BIM16Sp':calcBim(16,p,Z,Y)*(1-p),
+                'BIM15':calcBim(15,p,Z,Y),
+                'BIM15Sp':calcBim(15,p,Z,Y)*(1-p),
+                'BIM21':calcBim(21,p,Z,Y),
+                'BIM21Sp':calcBim(21,p,Z,Y)*(1-p)
+            }
+
+        with open('table3.pickle', 'wb') as handle:
+            pickle.dump(self.table3, handle, protocol=pickle.HIGHEST_PROTOCOL)       
+        with open('table3.pickle', 'rb') as handle:
+            self.table3 = pickle.load(handle)
+    def initTable3(self):
+        p = 0.01
+        for i in range(99):
+            self.table3[p] = [p, -1, -1, -1]
+            p += 0.01
+            p = "{:.2f}".format(p)
+            p = float(p)      
+      
+    def printTable3(self):
+        res={'p_values':[]}
+        for p in self.table3.items():
+            res['p_values'].append(p[0])
+            for value in p[1]:
+                if value in res:
+                    res[value].append(p[1][value])
+                else:
+                    res[value]=[p[1][value]]
+        print(tabulate(res, headers="keys"))
     def printAllPart3(self):
         print("T1=" + str(self.T1) + " T2=" + str(self.T2) + " T3=" + str(self.T3))
         print("-----------------------------------")
@@ -228,6 +325,14 @@ class Part3(Part2):
 
         print("Table 2: Cumulative BIM Spectra")
         self.printTable2Part3()
+        print("-----------------------------------")
+        print("-----------------------------------")
+        print("-----------------------------------")
+
+        print("Table 3:")
+        print("  i   M2=10,000 ")
+        
+        self.printTable3()
         print("-----------------------------------")
         print("-----------------------------------")
         print("-----------------------------------")
