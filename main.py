@@ -17,5 +17,6 @@ if __name__ == "__main__":
     p.part3_1() 
     p.part3_2()
     p.part3_4()
+    p.part3_5()
     p.printAllPart3()
   
