@@ -7,7 +7,11 @@ class Tables():
         self.table2 = {}
         self.table3 = {}
         self.table4 = {}
+
+        # Part 3
         self.table2Part3_2 = {}
+        self.table3part3 = {}
+        self.table4Part3 = {}
     
     # Part 2
     # --------------------------------------------
@@ -102,3 +106,69 @@ class Tables():
                 for i in M[1]:
                     res[str(edge[0])+'M'+str(M[0])].append(M[1][i])
         print(tabulate(res, headers="keys"))
+    
+    def initTable3Part3(self):
+        p = 0.01
+        for i in range(99):
+            self.table3Part3[p] = [p, -1, -1, -1]
+            p += 0.01
+            p = "{:.2f}".format(p)
+            p = float(p)      
+      
+    def printTable3Part3(self):
+        res={'p_values':[]}
+        for p in self.table3Part3.items():
+            res['p_values'].append(p[0])
+            for value in p[1]:
+                if value in res:
+                    res[value].append(p[1][value])
+                else:
+                    res[value]=[p[1][value]]
+        print(tabulate(res, headers="keys"))
+
+    def initTable4Part3(self):
+        p = 0.01
+        for i in range(1, 11):
+            self.table4Part3[i] = [i, -1, -1]
+        self.table4Part3["r.e"] = ["r.e=", -1, -1]
+
+    def printTable4Part3(self):
+        print("Gain in Reliability by means of CMC")
+        p_values = [0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+        edges = [9, 16, 15, 21]
+        print("",end='\t')
+        for edge in edges:
+            print(edge, end='\t')
+        print()
+        for p in p_values:
+            print(p,end='\t')
+            for edge in edges:
+                print(round(self.table4Part3[edge][p],3),end='\t')
+            print()
+
+    def printAllPart3(self):
+        print("T1=" + str(self.T1) + " T2=" + str(self.T2) + " T3=" + str(self.T3))
+        print("-----------------------------------")
+        print("Random Permutation:")
+        print(self.randomParmutation)
+
+        print("-----------------------------------")
+        print("Table 1: Destruction Spectra:")
+        print("  i    M1=1000   M2=10,000")
+        self.printTable1Part3()
+
+        print("Table 2: Cumulative BIM Spectra")
+        self.printTable2Part3()
+        print("-----------------------------------")
+        print("-----------------------------------")
+        print("-----------------------------------")
+
+        print("Table 3:")
+        print("  i   M2=10,000 ")
+        
+        self.printTable3Part3()
+        print("-----------------------------------")
+        print("-----------------------------------")
+        print("-----------------------------------")
+        print("Table 4:")
+        self.printTable4Part3()
