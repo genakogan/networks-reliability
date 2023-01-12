@@ -97,17 +97,16 @@ class Part3(Part2):
                 if self.G[u][v]['color'] == 'g':
                     self.ds.union(u, v)
             
-            result = self.calculateDSS()
-            if result == True:
+            if self.calculateDSS():
                 self.r += 1
             else:
+                # from up to down
                 self.a[self.r+1] += 1
                 while self.r < 30:
-                    print(self.r)
+                    # for all j in down put b(r,j)+=1
                     for i in range(0, self.r+1):
                         self.b[self.r + 1][self.randomParmutation[i]] += 1
                     self.r += 1
-
                 break
 
     def part3_2(self):
