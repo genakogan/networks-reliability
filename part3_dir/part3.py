@@ -24,6 +24,10 @@ class Part3(Part2):
         self.b = {}
         self.r=0
 
+        # Part3_3
+        self.mostImportant = [10,20]
+        self.lessImportant = [8, 23]
+        self.P = [0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
     def part3_1(self):
        
         self.initTable1Part3()
@@ -109,7 +113,7 @@ class Part3(Part2):
                     self.r += 1
                 break
 
-    def part3_2(self):
+    def part3_2_3(self):
         
         self.table2Part3_2 = {}
 
@@ -143,27 +147,17 @@ class Part3(Part2):
             for j in range(1, 31):
                 z[i][j] = self.b[i][j]/ self.M1
 
-
-        mostImportant = [9, 16]
-        lessImportant = [15, 21]
-
-        for edge in mostImportant:
+        for edge in self.mostImportant:
             self.table2Part3_2[edge] = {self.M1: {}, self.M2: {}}
             for i in range(1, 31):
                 self.table2Part3_2[edge][self.M1][i] = z[i][edge]
-        for edge in lessImportant:
+        for edge in self.lessImportant:
             self.table2Part3_2[edge] = {self.M1: {}, self.M2: {}}
             for i in range(1, 31):
                 self.table2Part3_2[edge][self.M1][i] = z[i][edge]
 
-        a = []
-        for i in range(1, 31):
-            l = []
-            for j in range(1, 31):
-                l.append(z[i][j])
-            a.append(l)
-
-
+       
+        # part 3 with
         # Iteration M2
         edgeDrops = {}
         self.a = {}
@@ -189,45 +183,32 @@ class Part3(Part2):
             for j in range(1, 31):
                 z[i][j] = self.b[i][j] / self.M2
 
-        for edge in mostImportant:
+        for edge in self.mostImportant:
             for i in range(1, 31):
                 self.table2Part3_2[edge][self.M2][i] = z[i][edge]
-        for edge in lessImportant:
+        for edge in self.lessImportant:
             for i in range(1, 31):
                 self.table2Part3_2[edge][self.M2][i] = z[i][edge]
 
-        aa = []
-        for i in range(1, 31):
-            l = []
-            for j in range(1, 31):
-                l.append(z[i][j])
-            aa.append(l)
+        
 
-        npma = np.array([i for i in aa])
+        
 
 # ------------------------------------------------------------------------------------
     
     def part3_4(self):
        
-        def calcBim(j, p,Z, Y, n=30):
+        def calcBim(j, p,Z, Y):
             res = 0
-            for i in range(1, n+1):
-                z = Z[i][j]
-                y = Y[i]
-                pq = math.pow(1-p, (i - 1)) * math.pow(p, (n - i))
-                pq2 = math.pow(1-p, i) * math.pow(p, (n - i - 1))
-                divENbas = math.factorial(i) * math.factorial(n - i)
-                natz=math.factorial(n)
-                droit=(y - z) * pq2
-                gauche=(z * pq)
-                bim = (gauche-droit)*natz
-                bim/=divENbas
-                res += bim
+            for i in range(1, 31):
+                pq = math.pow(1-p, (i - 1)) * math.pow(p, (30 - i))
+                pq2 = math.pow(1-p, i) * math.pow(p, (30 - i - 1))
+                natz=math.factorial(30)          
+                res += (((Z[i][j] * pq)-(Y[i] - Z[i][j]) * pq2)*natz)/(math.factorial(i) * math.factorial(30 - i))
             return abs(res)
 
-        edgeDrops = {}
-        self.a = {}
-        b = {}
+        edgeDrops,self.a,self.b = {},{},{}
+       
         for i in range(1, 31):
             edgeDrops[i] = 0
         for i in range(1, 31):
@@ -235,46 +216,34 @@ class Part3(Part2):
             temp = {}
             for j in range(1, 31):
                 temp[j] = 0
-            b[i] = temp
+            self.b[i] = temp
         for i in range(self.M2):
             self.randomParmutation = list(np.random.permutation(self.edgeNumbers))
             self.r = 0
             self.destructionBimSpectra()
-        Z = {}
-        Y = {}
-        tempEdgeDrops={}
-        for k in range(1,31):
-            if k==1:
-                tempEdgeDrops[k]=self.a[k]
-            else:
-                tempEdgeDrops[k] = tempEdgeDrops[k-1]+self.a[k]
 
-        a=tempEdgeDrops
+        Z,Y= {},{}
+        
         for i in range(1, 31):
             Z[i] = {}
             Y[i] = self.a[i] / self.M2
-            for j in range(1, 31):
-                
-                Z[i][j] = b[i][j] / self.M2
+            for j in range(1, 31): Z[i][j] = self.b[i][j] / self.M2
 
-        
+        # BIMs and Gain in Reliability
         self.table3Part3={}
-        P = [0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
-        for p in P:
-           
-            self.table3Part3[p]={
+       
+        for p in self.P: self.table3Part3[p]={
                  
-                'BIM9':calcBim(9,p,Z,Y),
-                'BIM9Sp':calcBim(9,p,Z,Y)*(1-p),
-                'BIM16':calcBim(16,p,Z,Y),
-                'BIM16Sp':calcBim(16,p,Z,Y)*(1-p),
-                'BIM15':calcBim(15,p,Z,Y),
-                'BIM15Sp':calcBim(15,p,Z,Y)*(1-p),
-                'BIM21':calcBim(21,p,Z,Y),
-                'BIM21Sp':calcBim(21,p,Z,Y)*(1-p)
+                'BIM10':calcBim(10,p,Z,Y),
+                'BIM10Sp':calcBim(10,p,Z,Y)*(1-p),
+                'BIM20':calcBim(20,p,Z,Y),
+                'BIM20Sp':calcBim(20,p,Z,Y)*(1-p),
+                'BIM8':calcBim(8,p,Z,Y),
+                'BIM8Sp':calcBim(8,p,Z,Y)*(1-p),
+                'BIM23':calcBim(23,p,Z,Y),
+                'BIM23Sp':calcBim(23,p,Z,Y)*(1-p)
             }
 
-    
 
 # ------------------------------------------------------------------------------------
 
@@ -282,30 +251,30 @@ class Part3(Part2):
         if on:
             return 1
         return 0
-    def makeGraphON(self,p,egde,on):
+    def newMakeGraph(self,p,egde,on):
         self.ds=DisjointSet()
         for i in range(1, 21):
             self.ds.find(i)
-        self.G.add_node(1, pos=(6.123233995736766e-17, -1.0))
-        self.G.add_node(2, pos=(-0.9510565162951535, -0.3090169943749475))
-        self.G.add_node(3, pos=(-0.5877852522924732, 0.8090169943749473))
-        self.G.add_node(4, pos=(0.5877852522924731, 0.8090169943749475))
-        self.G.add_node(5, pos=(0.9510565162951535, -0.3090169943749474))
+        self.G.add_node(1,pos=(0.002, -0.80))
+        self.G.add_node(2, pos=(-0.96, -0.30))
+        self.G.add_node(3, pos=(-0.59, 0.81))
+        self.G.add_node(4, pos=(0.59, 0.81))
+        self.G.add_node(5, pos=(0.95, -0.31))
         self.G.add_node(6, pos=(2.367, -0.75))
-        self.G.add_node(7, pos=(1.7633557568774194, -2.4270509831248424))
-        self.G.add_node(8, pos=(1.2246467991473532e-16, -2.5))
-        self.G.add_node(9, pos=(-1.7633557568774192, -2.4270509831248424))
+        self.G.add_node(7, pos=(1.76, -2.43))
+        self.G.add_node(8, pos=(0.00, -2.5))
+        self.G.add_node(9, pos=(-1.76, -2.43))
         self.G.add_node(10, pos=(-2.3, -0.78))
-        self.G.add_node(11, pos=(-2.853169548885461, 0.9270509831248419))
+        self.G.add_node(11, pos=(-2.85, 0.93))
         self.G.add_node(12, pos=(-1.461, 2.04))
-        self.G.add_node(13, pos=(-5.51091059616309e-16, 3.0))
+        self.G.add_node(13, pos=(0, 3.0))
         self.G.add_node(14, pos=(1.4, 1.99))
-        self.G.add_node(15, pos=(2.8531695488854605, 0.9270509831248421))
-        self.G.add_node(16, pos=(4.755282581475767, 1.545084971874737))
-        self.G.add_node(17, pos=(2.938926261462366, -4.045084971874737))
-        self.G.add_node(18, pos=(-2.938926261462365, -4.045084971874737))
-        self.G.add_node(19, pos=(-4.755282581475768, 1.5450849718747364))
-        self.G.add_node(20, pos=(-9.184850993605148e-16, 5.0))
+        self.G.add_node(15, pos=(2.85, 0.93))
+        self.G.add_node(16, pos=(4.76, 1.55))
+        self.G.add_node(17, pos=(2.94, -4.04))
+        self.G.add_node(18, pos=(-2.91, -4.04))
+        self.G.add_node(19, pos=(-4.76, 1.55))
+        self.G.add_node(20, pos=(0, 5.0))
 
         self.G.add_edge(1, 2, color=self.booleanValue(p, 1, 2), weight=1)
         self.G.add_edge(2, 3, color=self.booleanValue(p, 2, 3), weight=2)
@@ -314,38 +283,22 @@ class Part3(Part2):
         self.G.add_edge(5, 1, color=self.booleanValue(p, 5, 1), weight=5)
         self.G.add_edge(6, 7, color=self.booleanValue(p, 6, 7), weight=6)
         self.G.add_edge(7, 8, color=self.booleanValue(p, 7, 8), weight=7)
-        self.G.add_edge(8, 9, color=self.booleanValue(p, 8, 9), weight=8)
-        if egde==9:
-            self.G.add_edge(9, 10, color=self.booleanValue(self.returnBoolToInt(on),9, 10), weight=9)
-        else:
-            self.G.add_edge(9, 10, color=self.booleanValue(p, 9, 10), weight=9)
-        self.G.add_edge(10, 11, color=self.booleanValue(p, 10, 11), weight=10)
+        self.G.add_edge(8, 9, color=self.booleanValue(0, 8, 9), weight=8)
+        self.G.add_edge(9, 10, color=self.booleanValue(p, 9, 10), weight=9)
+        self.G.add_edge(10, 11, color=self.booleanValue(1, 10, 11), weight=10)
         self.G.add_edge(11, 12, color=self.booleanValue(p, 11, 12), weight=11)
         self.G.add_edge(12, 13, color=self.booleanValue(p, 12, 13), weight=12)
         self.G.add_edge(13, 14, color=self.booleanValue(p, 13, 14), weight=13)
         self.G.add_edge(14, 15, color=self.booleanValue(p, 14, 15), weight=14)
-        if egde == 15:
-            self.G.add_edge(15, 6, color=self.booleanValue(self.returnBoolToInt(on), 15, 6), weight=15)
-        else:
-            self.G.add_edge(15, 6, color=self.booleanValue(p, 15, 6), weight=15)
-
-        if egde==16:
-            self.G.add_edge(16, 17, color=self.booleanValue(self.returnBoolToInt(on), 16, 17), weight=16)
-        else:
-            self.G.add_edge(16, 17, color=self.booleanValue(p, 16, 17), weight=16)
-
+        self.G.add_edge(15, 6, color=self.booleanValue(p, 15, 6), weight=15)
+        self.G.add_edge(16, 17, color=self.booleanValue(p, 16, 17), weight=16)
         self.G.add_edge(17, 18, color=self.booleanValue(p, 17, 18), weight=17)
         self.G.add_edge(18, 19, color=self.booleanValue(p, 18, 19), weight=18)
         self.G.add_edge(19, 20, color=self.booleanValue(p, 19, 20), weight=19)
-        self.G.add_edge(20, 16, color=self.booleanValue(p, 20, 16), weight=20)
-        if egde == 21:
-            self.G.add_edge(15, 16, color=self.booleanValue(self.returnBoolToInt(on), 15, 16), weight=21)
-        else:
-            self.G.add_edge(15, 16, color=self.booleanValue(p, 15, 16), weight=21)
-
-
+        self.G.add_edge(20, 16, color=self.booleanValue(1, 20, 16), weight=20)
+        self.G.add_edge(15, 16, color=self.booleanValue(p, 15, 16), weight=21)
         self.G.add_edge(7, 17, color=self.booleanValue(p, 7, 17), weight=22)
-        self.G.add_edge(9, 18, color=self.booleanValue(p, 9, 18), weight=23)
+        self.G.add_edge(9, 18, color=self.booleanValue(0, 9, 18), weight=23)
         self.G.add_edge(11, 19, color=self.booleanValue(p, 11, 19), weight=24)
         self.G.add_edge(20, 13, color=self.booleanValue(p, 20, 13), weight=25)
         self.G.add_edge(1, 8, color=self.booleanValue(p, 1, 8), weight=26)
@@ -356,26 +309,25 @@ class Part3(Part2):
     
     def part3_5(self):
         self.initTable4Part3()
-        p_values = [0.4,0.5,0.6,0.7,0.8,0.9]
-        edges = [9,16,15,21]
+        
+        edges = [10,20,8,23]
         for edge in edges:
             self.table4Part3[edge]={}
-            for p in p_values:
+            for p in self.pValues:
                 for i in range(self.M2):
                     self.ds = DisjointSet()
-                    self.makeGraphON(p,edge,True)
+                    self.newMakeGraph(p,edge,True)
                     result = self.calculateDSS()
                     if (result == True):
                         self.r += 1
-                self.R1 = self.r / self.M2
-                self.r=0
-                for i in range(self.M2):
+                self.R1,self.r= self.r / self.M2,0
+               
+                for _ in range(self.M2):
                     self.ds = DisjointSet()
-                    self.makeGraphON(p,edge,False)
+                    self.newMakeGraph(p,edge,False)
                     result = self.calculateDSS()
                     if (result == True):
                         self.r += 1
-                self.R2 = self.r / self.M2
-                self.r=0
+                self.R2,self.r = self.r / self.M2,0
                 self.table4Part3[edge][p]=abs(self.R2-self.R1)
     

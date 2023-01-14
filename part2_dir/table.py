@@ -100,7 +100,7 @@ class Tables():
             p = float(p)
 
     def printTable2Part3(self):
-        res = { '9M1000': [], '9M10000': [],'16M1000': [], '16M10000': [],'15M1000': [], '15M10000': [],'21M1000': [], '21M10000': []}
+        res = { '10M1000': [], '10M10000': [],'20M1000': [], '20M10000': [],'8M1000': [], '8M10000': [],'23M1000': [], '23M10000': []}
         for edge in  self.table2Part3_2.items():
             for M in edge[1].items():
                 for i in M[1]:
@@ -135,7 +135,7 @@ class Tables():
     def printTable4Part3(self):
         print("Gain in Reliability by means of CMC")
         p_values = [0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
-        edges = [9, 16, 15, 21]
+        edges = [10, 20, 8, 23]
         print("",end='\t')
         for edge in edges:
             print(edge, end='\t')
