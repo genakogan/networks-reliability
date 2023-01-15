@@ -247,11 +247,8 @@ class Part3(Part2):
 
 # ------------------------------------------------------------------------------------
 
-    def returnBoolToInt(self,on):
-        if on:
-            return 1
-        return 0
-    def newMakeGraph(self,p,egde,on):
+    
+    def newMakeGraph(self,p):
         self.ds=DisjointSet()
         for i in range(1, 21):
             self.ds.find(i)
@@ -277,28 +274,28 @@ class Part3(Part2):
         self.G.add_node(20, pos=(0, 5.0))
 
         self.G.add_edge(1, 2, color=self.booleanValue(p, 1, 2), weight=1)
-        self.G.add_edge(2, 3, color=self.booleanValue(p, 2, 3), weight=2)
+        self.G.add_edge(2, 3, color=self.booleanValue(1, 2, 3), weight=2)
         self.G.add_edge(3, 4, color=self.booleanValue(p, 3, 4), weight=3)
-        self.G.add_edge(4, 5, color=self.booleanValue(p, 4, 5), weight=4)
+        self.G.add_edge(4, 5, color=self.booleanValue(1, 4, 5), weight=4)
         self.G.add_edge(5, 1, color=self.booleanValue(p, 5, 1), weight=5)
         self.G.add_edge(6, 7, color=self.booleanValue(p, 6, 7), weight=6)
         self.G.add_edge(7, 8, color=self.booleanValue(p, 7, 8), weight=7)
-        self.G.add_edge(8, 9, color=self.booleanValue(0, 8, 9), weight=8)
+        self.G.add_edge(8, 9, color=self.booleanValue(p, 8, 9), weight=8)
         self.G.add_edge(9, 10, color=self.booleanValue(p, 9, 10), weight=9)
-        self.G.add_edge(10, 11, color=self.booleanValue(1, 10, 11), weight=10)
+        self.G.add_edge(10, 11, color=self.booleanValue(p, 10, 11), weight=10)
         self.G.add_edge(11, 12, color=self.booleanValue(p, 11, 12), weight=11)
         self.G.add_edge(12, 13, color=self.booleanValue(p, 12, 13), weight=12)
         self.G.add_edge(13, 14, color=self.booleanValue(p, 13, 14), weight=13)
         self.G.add_edge(14, 15, color=self.booleanValue(p, 14, 15), weight=14)
         self.G.add_edge(15, 6, color=self.booleanValue(p, 15, 6), weight=15)
-        self.G.add_edge(16, 17, color=self.booleanValue(p, 16, 17), weight=16)
+        self.G.add_edge(16, 17, color=self.booleanValue(0, 16, 17), weight=16)
         self.G.add_edge(17, 18, color=self.booleanValue(p, 17, 18), weight=17)
         self.G.add_edge(18, 19, color=self.booleanValue(p, 18, 19), weight=18)
         self.G.add_edge(19, 20, color=self.booleanValue(p, 19, 20), weight=19)
-        self.G.add_edge(20, 16, color=self.booleanValue(1, 20, 16), weight=20)
+        self.G.add_edge(20, 16, color=self.booleanValue(0, 20, 16), weight=20)
         self.G.add_edge(15, 16, color=self.booleanValue(p, 15, 16), weight=21)
         self.G.add_edge(7, 17, color=self.booleanValue(p, 7, 17), weight=22)
-        self.G.add_edge(9, 18, color=self.booleanValue(0, 9, 18), weight=23)
+        self.G.add_edge(9, 18, color=self.booleanValue(p, 9, 18), weight=23)
         self.G.add_edge(11, 19, color=self.booleanValue(p, 11, 19), weight=24)
         self.G.add_edge(20, 13, color=self.booleanValue(p, 20, 13), weight=25)
         self.G.add_edge(1, 8, color=self.booleanValue(p, 1, 8), weight=26)
@@ -315,7 +312,7 @@ class Part3(Part2):
             for p in self.pValues:
                 for _ in range(self.M2):
                     self.ds = DisjointSet()
-                    self.newMakeGraph(p,edge,True)
+                    self.newMakeGraph(p)
                     result = self.calculateDSS()
                     if (result == True):
                         self.r += 1
@@ -323,7 +320,7 @@ class Part3(Part2):
                
                 for _ in range(self.M2):
                     self.ds = DisjointSet()
-                    self.newMakeGraph(p,edge,False)
+                    self.newMakeGraph(p)
                     result = self.calculateDSS()
                     if (result == True):
                         self.r += 1
