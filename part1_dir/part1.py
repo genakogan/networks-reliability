@@ -146,9 +146,9 @@ class Part1():
         self.G.add_edge(5, 6, color=self.booleanValue(p, 5, 6), weight=30)
         
     def creatingStateVector(self):
-        print("DSS")
+        #print("DSS")
         # Printing connected node
-        print(list(self.ds.itersets()))
+        #print(list(self.ds.itersets()))
 
         # get edges from G --> nx.Graph()
         edges = list(self.G.edges())
@@ -161,11 +161,16 @@ class Part1():
                 self.stateVector.append((k,v))
         
         # Printing stata vector depending on p value
-        print("State Vector")
-        print(self.stateVector)
+        #print("State Vector")
+        #print(self.stateVector)
 
     # dodecahedron network representation
     def graphShow(self):
+        def terminals(T):
+            if 2==T or 5==T or 19==T:
+                return "#1916EA"
+            return '#5e488a'
+
         self.makeGraph(0.5)
 
         # Create a figure and a set of subplots.
@@ -181,9 +186,11 @@ class Part1():
         # labels or edge labels and using the full Matplotlib figure area
         # and no axis labels by default.
         # :pos: Get node attributes from graph
+        nodeColors=[terminals(T) for T in self.G.nodes()]
+
         nx.draw(self.G, pos=nx.get_node_attributes(self.G, name='pos'), arrows=False,
                 edge_color=[self.G[u][v]['color'] for u, v in self.G.edges()],
-                node_color='#5e488a', with_labels=True, width=1.5)
+                node_color=nodeColors, with_labels=True, width=1.5)
         
         # Draw edge labels
         # :pos: Get node attributes from graph
@@ -258,10 +265,10 @@ class Part1():
             self.table[p][2], self.r = self.calculateReliabilityNetwork(self.M2),0
         self.printTable()
 
-'''
+
 if __name__ == "__main__":
-    p=part1(2,5,19)
+    p=Part1(2,5,19)
     p.graphShow() 
     p.assessNetworkReliability()
-'''   
+ 
     
