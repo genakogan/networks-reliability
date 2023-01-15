@@ -148,27 +148,25 @@ class Tables():
 
     def printAllPart3(self):
         print("T1=" + str(self.T1) + " T2=" + str(self.T2) + " T3=" + str(self.T3))
-        print("-----------------------------------")
+        print("==================================")
         print("Random Permutation:")
         print(self.randomParmutation)
 
-        print("-----------------------------------")
+        print("==================================")
         print("Table 1: Destruction Spectra:")
         print("  i    M1=1000   M2=10,000")
         self.printTable1Part3()
 
         print("Table 2: Cumulative BIM Spectra")
         self.printTable2Part3()
-        print("-----------------------------------")
-        print("-----------------------------------")
-        print("-----------------------------------")
+        print("==================================")
+        
 
         print("Table 3:")
         print("  i   M2=10,000 ")
         
         self.printTable3Part3()
-        print("-----------------------------------")
-        print("-----------------------------------")
-        print("-----------------------------------")
+        print("==================================")
+       
         print("Table 4:")
         self.printTable4Part3()
