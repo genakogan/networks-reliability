@@ -198,7 +198,7 @@ class Part3(Part2):
     
     def part3_4(self):
        
-        def calcBim(j, p,Z, Y):
+        def BIM(j, p,Z, Y):
             res = 0
             for i in range(1, 31):
                 pq = math.pow(1-p, (i - 1)) * math.pow(p, (30 - i))
@@ -207,7 +207,7 @@ class Part3(Part2):
                 res += (((Z[i][j] * pq)-(Y[i] - Z[i][j]) * pq2)*natz)/(math.factorial(i) * math.factorial(30 - i))
             return abs(res)
 
-        edgeDrops,self.a,self.b = {},{},{}
+        edgeDrops,self.a,b = {},{},{}
        
         for i in range(1, 31):
             edgeDrops[i] = 0
@@ -216,7 +216,7 @@ class Part3(Part2):
             temp = {}
             for j in range(1, 31):
                 temp[j] = 0
-            self.b[i] = temp
+            b[i] = temp
         for i in range(self.M2):
             self.randomParmutation = list(np.random.permutation(self.edgeNumbers))
             self.r = 0
@@ -227,28 +227,32 @@ class Part3(Part2):
         for i in range(1, 31):
             Z[i] = {}
             Y[i] = self.a[i] / self.M2
-            for j in range(1, 31): Z[i][j] = self.b[i][j] / self.M2
+            for j in range(1, 31): Z[i][j] = b[i][j] / self.M2
 
         # BIMs and Gain in Reliability
         self.table3Part3={}
        
         for p in self.P: self.table3Part3[p]={
                  
-                'BIM10':calcBim(2,p,Z,Y),
-                'BIM10Sp':calcBim(2,p,Z,Y)*(1-p),
-                'BIM20':calcBim(4,p,Z,Y),
-                'BIM20Sp':calcBim(4,p,Z,Y)*(1-p),
-                'BIM8':calcBim(16,p,Z,Y),
-                'BIM8Sp':calcBim(16,p,Z,Y)*(1-p),
-                'BIM23':calcBim(20,p,Z,Y),
-                'BIM23Sp':calcBim(20,p,Z,Y)*(1-p)
+                'BIM10':BIM(2,p,Z,Y),
+                'BIM10Sp':BIM(2,p,Z,Y)*(1-p),
+                'BIM20':BIM(4,p,Z,Y),
+                'BIM20Sp':BIM(4,p,Z,Y)*(1-p),
+                'BIM8':BIM(16,p,Z,Y),
+                'BIM8Sp':BIM(16,p,Z,Y)*(1-p),
+                'BIM23':BIM(20,p,Z,Y),
+                'BIM23Sp':BIM(20,p,Z,Y)*(1-p)
             }
 
 
 # ------------------------------------------------------------------------------------
 
     
-    def newMakeGraph(self,p):
+    def newMakeGraph(self,p,edge,onOff):
+
+        def edgeOnOff(on):
+            if on: return 1
+            return 0
         self.ds=DisjointSet()
         for i in range(1, 21):
             self.ds.find(i)
@@ -272,11 +276,12 @@ class Part3(Part2):
         self.G.add_node(18, pos=(-2.91, -4.04))
         self.G.add_node(19, pos=(-4.76, 1.55))
         self.G.add_node(20, pos=(0, 5.0))
-
         self.G.add_edge(1, 2, color=self.booleanValue(p, 1, 2), weight=1)
-        self.G.add_edge(2, 3, color=self.booleanValue(1, 2, 3), weight=2)
+        if edge==2: self.G.add_edge(2, 3, color=self.booleanValue(edgeOnOff(onOff), 2, 3), weight=2)
+        else: self.G.add_edge(2, 3, color=self.booleanValue(p, 2, 3), weight=2)
         self.G.add_edge(3, 4, color=self.booleanValue(p, 3, 4), weight=3)
-        self.G.add_edge(4, 5, color=self.booleanValue(1, 4, 5), weight=4)
+        if edge==4: self.G.add_edge(4, 5, color=self.booleanValue(edgeOnOff(onOff), 4, 5), weight=4)
+        else: self.G.add_edge(4, 5, color=self.booleanValue(p, 4, 5), weight=4)
         self.G.add_edge(5, 1, color=self.booleanValue(p, 5, 1), weight=5)
         self.G.add_edge(6, 7, color=self.booleanValue(p, 6, 7), weight=6)
         self.G.add_edge(7, 8, color=self.booleanValue(p, 7, 8), weight=7)
@@ -288,11 +293,13 @@ class Part3(Part2):
         self.G.add_edge(13, 14, color=self.booleanValue(p, 13, 14), weight=13)
         self.G.add_edge(14, 15, color=self.booleanValue(p, 14, 15), weight=14)
         self.G.add_edge(15, 6, color=self.booleanValue(p, 15, 6), weight=15)
-        self.G.add_edge(16, 17, color=self.booleanValue(0, 16, 17), weight=16)
+        if edge==16: self.G.add_edge(16, 17, color=self.booleanValue(edgeOnOff(onOff), 16, 17), weight=16)
+        else: self.G.add_edge(16, 17, color=self.booleanValue(p, 16, 17), weight=16)
         self.G.add_edge(17, 18, color=self.booleanValue(p, 17, 18), weight=17)
         self.G.add_edge(18, 19, color=self.booleanValue(p, 18, 19), weight=18)
         self.G.add_edge(19, 20, color=self.booleanValue(p, 19, 20), weight=19)
-        self.G.add_edge(20, 16, color=self.booleanValue(0, 20, 16), weight=20)
+        if edge==20: self.G.add_edge(20, 16, color=self.booleanValue(edgeOnOff(onOff), 20, 16), weight=20)
+        else: self.G.add_edge(20, 16, color=self.booleanValue(p, 20, 16), weight=20)
         self.G.add_edge(15, 16, color=self.booleanValue(p, 15, 16), weight=21)
         self.G.add_edge(7, 17, color=self.booleanValue(p, 7, 17), weight=22)
         self.G.add_edge(9, 18, color=self.booleanValue(p, 9, 18), weight=23)
@@ -306,13 +313,13 @@ class Part3(Part2):
     
     def part3_5(self):
         
-        edges = [2,4,16,20]
-        for edge in edges:
+       
+        for edge in [2,4,16,20]:
             self.table4Part3[edge]={}
             for p in self.pValues:
                 for _ in range(self.M2):
                     self.ds = DisjointSet()
-                    self.newMakeGraph(p)
+                    self.newMakeGraph(p,edge,1) # first mistake
                     result = self.calculateDSS()
                     if (result == True):
                         self.r += 1
@@ -320,7 +327,7 @@ class Part3(Part2):
                
                 for _ in range(self.M2):
                     self.ds = DisjointSet()
-                    self.newMakeGraph(p)
+                    self.newMakeGraph(p,edge,0) # first mistake
                     result = self.calculateDSS()
                     if (result == True):
                         self.r += 1
